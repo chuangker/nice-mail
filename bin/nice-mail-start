@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+process.env.NODE_ENV = 'production'
+
+const program = require('commander')
+
+const util = require('../util')
+const app = require('../app')
+
+let port = util.getConfig('port')
+
+program
+  .usage('[project-path]')
+  .option('-p, --port <n>', '指定端口，默认 ' + port)
+  .parse(process.argv)
+
+if (program.port) port = program.port
+
+app.listen(port)
+
+console.log()
+console.log(`server started at http://127.0.0.1:${port}`)

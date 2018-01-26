@@ -1,0 +1,23 @@
+{
+  "name": "Nice Mail",
+  "assets": "./assets",
+  "preview": "theme.png",
+  "fields": [
+    {
+      "name": "subtitle",
+      "value": "~ Hello World ~"
+    },
+    {
+      "name": "avatar",
+      "value": "avatar.png"
+    },
+    {
+      "name": "nickName",
+      "value": "Nick Name"
+    },
+    {
+      "name": "desc",
+      "value": "Description"
+    }
+  ]
+}
