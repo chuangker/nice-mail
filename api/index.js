@@ -3,6 +3,7 @@
 const fs = require('fs')
 const _ = require('lodash')
 const path = require('path')
+const { URL } = require('url')
 const Email = require('email-templates')
 const MarkdownIt = require('markdown-it')
 const mark = require('markdown-it-mark')
@@ -20,6 +21,8 @@ const inlineBase64 = require('nodemailer-plugin-inline-base64')
 const util = require('../util')
 
 const templateDir = path.resolve(__dirname, '../templates')
+const uploadDir = util.getDir('upload')
+
 const md = new MarkdownIt({
   html: true,
   breaks: true,
@@ -37,6 +40,25 @@ const md = new MarkdownIt({
   .use(tasklists, { enabled: this.taskLists })
 
 module.exports = class ApiController {
+  static async upload (ctx) {
+    const origin = ctx.request.origin
+    let files = ctx.request.body.files.file
+
+    if (files && !files.length) {
+      files = [files]
+    }
+
+    const list = files.map(file => {
+      const reader = fs.createReadStream(file.path)
+      const fileName = _.now() + _.random(_.now()) + path.extname(file.name).toLowerCase()
+      const stream = fs.createWriteStream(path.resolve(uploadDir, fileName))
+      reader.pipe(stream)
+      return new URL(path.join('upload', fileName), origin).href
+    })
+
+    ctx.body = ctx.util.resuccess(list)
+  }
+
   static async getTemplate (ctx) {
     const config = util.getAllTemplateConfig().map(conf => {
       return {
@@ -159,7 +181,7 @@ module.exports = class ApiController {
     const mailConf = _.find(util.getDB('mail'), ['from', mailFrom])
 
     if (!mailConf) {
-      ctx.body = ctx.util.refail('asa')
+      ctx.body = ctx.util.refail('无发件人信息')
       return
     }
 

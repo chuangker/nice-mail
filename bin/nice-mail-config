@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+const program = require('commander')
+
+const util = require('../util')
+
+const conf = util.getConfig()
+
+program
+  .option('--db <dir>', '配置缓存数据的目录地址，默认为 ' + util.getDir('db'))
+  .option('--upload <dir>', '配置上传文件的目录地址，默认为 ' + util.getDir('upload'))
+  .parse(process.argv)
+
+if (program.db) {
+  conf.db = program.db
+  util.setConfig(conf)
+  console.log()
+  console.log('设置成功，当前 db 的目录地址为 ' + util.getDir('db'))
+}
+
+if (program.upload) {
+  conf.upload = program.upload
+  util.setConfig(conf)
+  console.log()
+  console.log('设置成功，当前 upload 的目录地址为 ' + util.getDir('upload'))
+}

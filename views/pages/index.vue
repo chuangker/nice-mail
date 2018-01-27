@@ -34,8 +34,11 @@
 
       <div class="ui tab" data-tab="tab-name">
         <div class="ui form">
+          <div class="ui active inverted dimmer" v-if="isSend">
+            <div class="ui text loader">发送中</div>
+          </div>
           <div class="field">
-            <textarea placeholder="内容" rows="30" v-model="form.content"></textarea>
+            <textarea ref="editor" :disabled="isSend" placeholder="内容" rows="30" v-model="form.content"></textarea>
           </div>
           <div class="field">
             <div class="ui fluid button" @click="genDemo">使用演示文本</div>
@@ -131,6 +134,7 @@ export default {
       users: [],
       templates: [],
       html: '',
+      isSend: false,
       senderVisible: false,
       docsVisible: false,
       notice: {
@@ -153,9 +157,15 @@ export default {
       }
     }
   },
+  computed: {
+    editor () {
+      return this.$refs.editor
+    }
+  },
   mounted () {
-    this.preview()
+    this.bindDrop()
     this.fetch().then(() => {
+      this.preview()
       this.$nextTick(() => {
         $('.ui.dropdown').dropdown({
           allowAdditions: true
@@ -186,6 +196,43 @@ export default {
     }
   },
   methods: {
+    bindDrop () {
+      this.editor.ondragleave = (e) => e.preventDefault()
+      this.editor.ondragenter = (e) => e.preventDefault()
+      this.editor.ondragover = (e) => e.preventDefault()
+      this.editor.ondrop = (e) => {
+        e.preventDefault()
+
+        const data = e.dataTransfer.files
+        const formData = new FormData()
+
+        if (data.length < 1) return
+
+        for (let i = 0; i < data.length; i++) {
+          formData.append('file', data[i], data[i].name)
+        }
+
+        this.uploadImage(formData)
+      }
+    },
+    uploadImage (formData) {
+      axios.post('/api/upload', formData).then(res => {
+        const body = res.data
+        if (body.success) {
+          this.setNotice(true, '上传成功', '图片已成功上传！')
+          this.updateContentByCursor(body.data.map(img => {
+            return `![Image](${img})`
+          }).join(' '))
+        }
+      })
+    },
+    updateContentByCursor (content) {
+      const rangeStart = this.editor.selectionStart
+      const rangeEnd = this.editor.selectionEnd
+      const tempStr1 = this.editor.value.substring(0, rangeStart)
+      const tempStr2 = this.editor.value.substring(rangeEnd)
+      this.form.content = tempStr1 + content + tempStr2
+    },
     genDemo () {
       if (this.form.content) {
         return this.setNotice(true, '警告', '请先清空正文！', 'negative')
@@ -212,9 +259,7 @@ export default {
       this.notice.content = content
       this.notice.type = type || 'success'
       this.notice.timer = setTimeout(() => {
-        if (this.notice.type !== 'negative') {
-          this.notice.visible = false
-        }
+        this.notice.visible = false
       }, 3000)
     },
     preview: debounce(function () {
@@ -224,13 +269,15 @@ export default {
           return this.setNotice(true, '错误信息', body.message, 'negative')
         }
         this.html = res.data.data.html
-        this.setNotice(false)
       })
     }, 200),
     fetchUser () {
       return axios.get('/api/user').then(res => {
-        this.users = res.data.data
-        this.form.from = this.users[0].from
+        const body = res.data
+        if (body.data.length) {
+          this.users = res.data.data
+          this.form.from = this.users[0].from
+        }
         return res
       })
     },
@@ -244,6 +291,7 @@ export default {
       })
     },
     send (send) {
+      if (this.isSend) return
       const data = new FormData()
       Array.prototype.slice.call(this.files, 0).forEach(file => data.append('file', file))
       Object.keys(this.form).forEach(key => {
@@ -254,12 +302,16 @@ export default {
         }
       })
       data.append('send', send)
+      this.isSend = true
       axios.post('/api/send', data).then(res => {
         const body = res.data
+        this.isSend = false
         if (!body.success) {
           return this.setNotice(true, '错误信息', body.message, 'negative')
         }
         this.setNotice(true, '发送成功', this.form.subject + ' 已成功发送！')
+      }).catch(() => {
+        this.isSend = false
       })
     }
   }

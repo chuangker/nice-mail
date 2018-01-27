@@ -10,7 +10,6 @@ const app = require('../app')
 let port = util.getConfig('port')
 
 program
-  .usage('[project-path]')
   .option('-p, --port <n>', '指定端口，默认 ' + port)
   .parse(process.argv)
 

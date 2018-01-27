@@ -20,9 +20,10 @@ util.init()
 
 router
   .get('/user', api.getMailUser)
+  .get('/template', api.getTemplate)
   .post('/user', api.addMailUser)
   .post('/user/delete', api.deleteMailUser)
-  .get('/template', api.getTemplate)
+  .post('/upload', api.upload)
   .post('/preview', api.preview)
   .post('/send', api.send)
 
@@ -34,6 +35,7 @@ app
   .use(favicon(path.resolve(__dirname, 'public/images/logo.png')))
   .use(serve('/dist', './dist'))
   .use(serve('/public', './public'))
+  .use(serve('/upload', path.resolve(__dirname, 'config', util.getDir('upload'))))
   .use(koaBody({ multipart: true }))
   .use(middleware.util)
   .use(router.routes())

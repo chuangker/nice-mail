@@ -21,6 +21,7 @@
 - 支持主题 & 字段配置
 - 支持自定义主题
 - 支持实时预览
+- 支持往编辑器中拖拽上传图片
 - 支持 HTML
 - 支持 Markdown
 
@@ -30,6 +31,21 @@
 
 ```shell
 $ npm install -g @chuangker/nice-mail
+```
+
+## 配置文件
+
+默认情况下，所有的数据都被存放在 Nice Mail 安装的目录下。为了防止升级所造成的数据清空，那么就需要在 **第一次使用前完成以下配置**。
+
+```shell
+# 获取帮助
+$ nice-mail config -h
+
+# 配置缓存数据的目录地址，一般用来缓存发件人等信息
+$ nice-mail config --db <dir>
+
+# 配置上传文件的目录地址
+$ nice-mail config --upload <dir>
 ```
 
 ## 快速开始
@@ -42,7 +58,7 @@ $ nice-mail start
 $ nice-mail start -p <端口号>
 ```
 
-- 打开浏览器（建议使用 Chrome 以获取最佳体验）
+- 打开浏览器（建议使用 Chrome 以获得最佳体验）
 - 访问 http://127.0.0.1:7500 （如果是自定义端口，需替换端口号）
 - 尽情享受吧！
 

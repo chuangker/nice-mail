@@ -6,4 +6,5 @@ program
   .version(require('../package').version)
   .usage('<command> [options]')
   .command('start', '启动 Nice Mail')
+  .command('config', '配置 Nice Mail')
   .parse(process.argv)
