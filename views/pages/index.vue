@@ -21,6 +21,7 @@
               <div class="item" @click="senderVisible = true">发件人配置</div>
               <div class="item" @click="docsVisible = true">使用文档</div>
               <a class="item" href="https://github.com/chuangker/nice-mail" target="_blank">GitHub</a>
+              <a class="item" href="https://www.webpagefx.com/tools/emoji-cheat-sheet/" target="_blank">Emoji</a>
             </div>
           </div>
         </div>
