@@ -1,11 +1,15 @@
 {
-  "name": "Nice Mail",
+  "name": "Crypto Kitties",
   "assets": "./assets",
   "preview": "theme.png",
   "fields": [
     {
+      "name": "title",
+      "value": "Mail Title."
+    },
+    {
       "name": "subtitle",
-      "value": "~ Hello World ~"
+      "value": "Subtitle."
     },
     {
       "name": "avatar",

@@ -86,7 +86,7 @@
           </div>
 
           <div class="field" v-for="(item, index) in form.fields" :key="index">
-            <input type="text" :placeholder="item.name" v-model="item.value" @change="preview">
+            <textarea :placeholder="item.name" rows="5" v-model="item.value" @change="preview"></textarea>
           </div>
         </div>
       </div>

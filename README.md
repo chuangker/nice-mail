@@ -14,7 +14,7 @@
 
 **:bulb: TIP：主题持续完善中哦！欢迎提 PR。** 
 
-![预览图](https://user-images.githubusercontent.com/7939566/35443628-c0060c14-02e6-11e8-8877-5550ca2460f8.png)
+![预览图](https://user-images.githubusercontent.com/7939566/35725822-a82b396e-083d-11e8-9c15-3d0e7adc886a.png)
 
 ## 特性
 

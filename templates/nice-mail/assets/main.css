@@ -1,0 +1,87 @@
+.banner {
+  background-color: red;
+  position: relative;
+  height: 380px;
+  border-left: 10px solid #da0000;
+  color: #fff;
+  text-align: center;
+}
+
+.banner__background {
+  height: 100%;
+  width: 100%;
+  opacity: .5;
+  background-image: url(background-eight-red.png);
+  background-position: center center;
+  background-size: 100% auto;
+}
+
+.banner__content {
+  position: absolute;
+  top: 35%;
+  width: 100%;
+}
+
+.banner__title {
+  font-size: 80px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.banner__uptitle {
+  font-size: 22px;
+}
+
+.border-left {
+  border-left: 10px solid #da0000;
+}
+
+.logo {
+  position: absolute;
+  z-index: 999;
+  top: 40px;
+  left: 30px;
+}
+
+.logo a {
+  text-decoration: none;
+  color: #fff;
+  padding: 10px 20px;
+  border: 2px solid #fff;
+  border-radius: 4px;
+}
+
+.footer {
+  background-color: #f8faff;
+  border-left: 10px solid #da0000;
+  padding: 80px 0;
+}
+
+.footer .card {
+  width: 200px;
+  vertical-align: top;
+  margin: auto;
+  background: #fff;
+  border-radius: 6px;
+  padding: 30px;
+  box-shadow: 0 10px 40px 0 rgba(62,57,107,0.07), 0 2px 9px 0 rgba(62,57,107,0.06);
+  text-align: center;
+}
+
+.footer .card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.footer .card .desc {
+  color: #999;
+  font-size: 14px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.markdown-body {
+  padding: 40px 20px;
+  word-wrap: break-word;
+}

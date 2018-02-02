@@ -1,0 +1,53 @@
+doctype html
+html
+  head
+    meta(name='viewport', content='width=device-width')
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    title= subject
+    link(rel="stylesheet", href="../../../public/css/template-reset.css", data-inline)
+    link(rel="stylesheet", href="../../../public/css/template-markdown.css", data-inline)
+    link(rel="stylesheet", href="main.css", data-inline)
+  body
+    table.body(border='0', cellpadding='0', cellspacing='0')
+      tr
+        td
+          div.header
+            a(href="https://github.com/chuangker/nice-mail", target="_blank")
+              img.logo(src="../../../public/images/logo.png", alt="logo")
+              p Nice Mail
+              div.clear
+          div.landing
+            div.description
+              h1.headline !{fields.title}
+              p.subheadline !{fields.subtitle}
+            div.slots
+              img(src="landing-kitty.png", alt="")
+            div.clear
+          div.bg
+            div.container
+              .content
+                // START CENTERED WHITE CONTAINER
+                table.main(border='0', cellpadding='0', cellspacing='0')
+                  // START MAIN CONTENT AREA
+                  tr
+                    td.wrapper
+                      table(border='0', cellpadding='0', cellspacing='0')
+                        tr
+                          td.markdown-body !{content}
+                  tr
+                    td
+                      div.hr
+                  tr
+                    td.wrapper.footer
+                      table(border='0', cellpadding='0', cellspacing='0')
+                        tr
+                          td
+                            div
+                              img.avatar(src= fields.avatar)
+                            p.nice-name !{fields.nickName}
+                            p.desc !{fields.desc}
+                            a.copyright(href="https://github.com/chuangker/nice-mail", target="_blank")
+                              img.logo(src="../../../public/images/logo.png", alt="logo")
+                              p Nice Mail
+                  // END MAIN CONTENT AREA
+                // END CENTERED WHITE CONTAINER

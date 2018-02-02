@@ -1,6 +1,6 @@
 {
   "name": "@chuangker/nice-mail",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Nice Mail 是一款以 Markdown 为基础的邮件编辑器。",
   "main": "app.js",
   "bin": {
@@ -32,8 +32,7 @@
     "middlewares",
     "public",
     "templates",
-    "util",
-    "views"
+    "util"
   ],
   "repository": {
     "type": "git",

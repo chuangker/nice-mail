@@ -1,14 +1,14 @@
-doctype strict
-html(xmlns="http://www.w3.org/1999/xhtml")
+doctype html
+html
   head
-    meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name='viewport', content='width=device-width')
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
     title= subject
-    link(rel="stylesheet", href="style.css", data-inline)
-    link(rel="stylesheet", href="markdown.css", data-inline)
-
+    link(rel="stylesheet", href="../../../public/css/template-reset.css", data-inline)
+    link(rel="stylesheet", href="../../../public/css/template-markdown.css", data-inline)
+    link(rel="stylesheet", href="main.css", data-inline)
   body
-    table#backgroundTable(cellpadding="0", cellspacing="0", border="0")
+    table.body(border='0', cellpadding='0', cellspacing='0')
       tr
         td
           div.banner
@@ -18,11 +18,12 @@ html(xmlns="http://www.w3.org/1999/xhtml")
             div.banner__content
               p.banner__title !{subject}
               p.banner__uptitle !{fields.subtitle}
-          div.content
-            table(cellpadding="0", cellspacing="0", border="0", align="center")
-              tr
-                td
-                  div.markdown-body !{content}
+          div.border-left
+            .container
+              .content
+                table(cellpadding="0", cellspacing="0", border="0", align="center")
+                  tr
+                    td.markdown-body !{content}
           div.footer
             div.card
               div.header
