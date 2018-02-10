@@ -1,0 +1,27 @@
+{
+  "name": "Khroma Co",
+  "assets": "./assets",
+  "preview": "theme.png",
+  "fields": [
+    {
+      "name": "title",
+      "value": "Khroma Co."
+    },
+    {
+      "name": "subtitle",
+      "value": "What's past is prologue."
+    },
+    {
+      "name": "avatar",
+      "value": "../../../public/images/avatar.png"
+    },
+    {
+      "name": "nickName",
+      "value": "Nick Name"
+    },
+    {
+      "name": "desc",
+      "value": "Description"
+    }
+  ]
+}

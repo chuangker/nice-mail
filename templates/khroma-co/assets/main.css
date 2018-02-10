@@ -1,0 +1,135 @@
+html,
+table.body {
+  background-image: url(topography.png);
+}
+
+.header {
+  border-radius: 0;
+}
+
+.header td {
+  position: relative;
+}
+
+.header .left,
+.header .right {
+  position: absolute;
+  width: 130px;
+  height: 100%;
+}
+
+.header .left {
+  background-image: url(left.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.header .right {
+  right: 0;
+  background-image: url(right.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.header .content {
+  width: 340px;
+  margin: auto;
+  position: relative;
+  z-index: 999;
+  text-align: center;
+}
+
+.header .logo {
+  display: inline-block;
+  margin-top: 20px;
+  color: #000;
+}
+
+.header .title {
+  font-size: 58px!important;
+  line-height: 1.4;
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+.header .desc {
+  color: #FF356A;
+  line-height: 1.4;
+  font-size: 26px!important;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.header .hr {
+  display: inline-block;
+  width: 40px;
+  height: 2px;
+  background: #FF356A;
+}
+
+.logo img {
+  width: 48px;
+  float: left;
+}
+
+.logo p {
+  font-size: 22px;
+  line-height: 48px;
+  float: left;
+  margin-bottom: 0;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+.markdown {
+  background: initial;
+}
+
+.markdown-body {
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, .7);
+}
+
+.footer {
+  text-align: center;
+  background: #fff;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.footer .avatar {
+  width: 80px;
+  height: 80px;
+  display: inline-block;
+  border-radius: 100%;
+  border: 6px solid #4f3a3b;
+}
+
+.footer .desc {
+  font-weight: bold;
+}
+
+.nice-name {
+  margin-top: 20px;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.copyright {
+  display: inline-block;
+  background: #12162d;
+  border-radius: 30px;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 12px;
+}
+
+@media only screen and (max-width: 620px) {
+  .header .left,
+  .header .right {
+    width: 80px!important;
+  }
+}
