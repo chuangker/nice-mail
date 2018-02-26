@@ -4,6 +4,10 @@
   "preview": "theme.png",
   "fields": [
     {
+      "name": "title",
+      "value": "Nice Mail"
+    },
+    {
       "name": "subtitle",
       "value": "~ Hello World ~"
     },

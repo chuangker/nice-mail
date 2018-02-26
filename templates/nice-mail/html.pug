@@ -1,5 +1,5 @@
-doctype html
-html
+doctype transitional
+html(xmlns='http://www.w3.org/1999/xhtml', lang='en', xml:lang='en')
   head
     meta(name='viewport', content='width=device-width')
     meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
@@ -11,24 +11,24 @@ html
     table.body(border='0', cellpadding='0', cellspacing='0')
       tr
         td
-          div.banner
-            div.logo
-              a(href="https://github.com/chuangker/nice-mail" target="_blank") Nice Mail
-            div.banner__background
-            div.banner__content
-              p.banner__title !{subject}
-              p.banner__uptitle !{fields.subtitle}
-          div.border-left
-            .container
-              .content
-                table(cellpadding="0", cellspacing="0", border="0", align="center")
-                  tr
-                    td.markdown-body !{content}
-          div.footer
-            div.card
-              div.header
-                if fields.avatar
-                  img(src= fields.avatar)
-                h3 !{fields.nickName}
-              p.desc !{fields.desc}
-
+          div.container
+            .content
+              table.main.header(border='0', cellpadding='0', cellspacing='0')
+                tr
+                  td
+                    div.content
+                      a.logo(href="https://github.com/chuangker/nice-mail", target="_blank") Nice Mail
+                      br
+                      p.title.text-center !{fields.title}
+                      div.hr
+                      p.desc.text-center !{fields.subtitle}
+              table.main.markdown(border='0', cellpadding='0', cellspacing='0')
+                tr
+                  td
+                    .markdown-body !{content}
+                tr
+                  td.footer
+                    img.avatar(src= fields.avatar)
+                    p.nice-name !{fields.nickName}
+                    p.desc !{fields.desc}
+                    a.copyright(href="https://github.com/chuangker/nice-mail", target="_blank") @Nice Mail

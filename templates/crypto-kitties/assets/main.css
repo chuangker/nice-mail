@@ -1,11 +1,60 @@
-.header {
-  padding: 20px;
-  background-color: #ffffff;
-  position: relative;
-  z-index: 999;
+html,
+table.body {
+  background-image: url(topography.png);
 }
 
-.header p {
+.header {
+  border-radius: 0;
+}
+
+.header .slots {
+  float: left;
+  width: 50%;
+  overflow: hidden;
+}
+
+.header .info {
+  width: 50%;
+  float: left;
+  padding: 0 20px 20px 20px;
+  box-sizing: border-box;
+}
+
+.header .logo {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  color: #000;
+  padding: 20px;
+}
+
+.header .title {
+  font-size: 58px!important;
+  line-height: 1.4;
+  font-weight: bold;
+}
+
+.header .desc {
+  color: #FF356A;
+  line-height: 1.4;
+  font-size: 26px!important;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.header .hr {
+  display: inline-block;
+  width: 40px;
+  height: 2px;
+  background: #FF356A;
+}
+
+.logo img {
+  width: 48px;
+  float: left;
+}
+
+.logo p {
   font-size: 22px;
   line-height: 48px;
   float: left;
@@ -14,108 +63,30 @@
   font-weight: bold;
 }
 
-.header a {
-  color: #000;
+.markdown {
+  background: initial;
 }
 
-.header .logo {
-  width: 48px;
-  float: left;
-}
-
-.landing {
-  padding-left: 20px;
-  background: #fff;
-}
-
-.landing .description,
-.landing .slots {
-  float: left;
-}
-
-.landing .description {
-  width: 50%;
-}
-
-.landing .description .headline {
-  font-size: 58px;
-  line-height: 1;
-  font-weight: bold;
-}
-
-.landing .description .subheadline {
-  font-size: 38px;
-  line-height: 1;
-  color: #82817d;
-}
-
-.landing .slots {
-  width: 50%;
-  overflow: hidden;
-}
-
-.landing .slots img {
-  display: block;
-}
-
-
-@media only screen and (max-width: 620px) {
-  .landing {
-    padding-left: 0!important;
-  }
-
-  .landing .description .headline {
-    font-size: 78px!important;
-  }
-
-  .landing .description .subheadline {
-    font-size: 48px!important;
-  }
-
-  .landing .description {
-    width: 100%!important;
-    padding-top: 10px;
-    padding-bottom: 60px;
-    box-sizing: border-box;
-    padding-left: 20px;
-  }
-
-  .landing .slots {
-    width: 100%!important;
-    height: 300px;
-  }
-}
-
-.bg {
-  background-color: #f3f1ee;
-  background-image: url(pattern-tile.png);
-  background-size: 100%;
-  padding: 80px 0;
-}
-
-.hr {
-  height: 0;
-  border-top: 2px dashed #eae5d8;
-  position: relative;
-  top: 100px;
-}
-
-.main {
-  border-radius: 6px;
+.markdown-body {
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, .7);
 }
 
 .footer {
   text-align: center;
-  position: relative;
-  z-index: 999;
+  background: #fff;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .footer .avatar {
-  width: 140px;
-  height: 140px;
+  width: 80px;
+  height: 80px;
   display: inline-block;
   border-radius: 100%;
-  border: 10px solid #4f3a3b;
+  border: 6px solid #4f3a3b;
 }
 
 .footer .desc {
@@ -124,33 +95,27 @@
 
 .nice-name {
   margin-top: 20px;
-  font-size: 38px;
+  font-size: 28px;
   line-height: 1;
   font-weight: bold;
 }
 
 .copyright {
-  padding: 10px 140px;
   display: inline-block;
-  border-radius: 100px;
+  background: #12162d;
+  border-radius: 30px;
+  padding: 10px 20px;
   color: #fff;
-  margin: 20px 0;
-  box-shadow: 0 2px 20px 0 rgba(237,66,100,0.4);
-  background: -webkit-linear-gradient(-45deg, #ED4264, #FFEDBC);
-  background: -o-linear-gradient(-45deg, #ED4264, #FFEDBC);
-  background: -moz-linear-gradient(-45deg, #ED4264, #FFEDBC);
-  background: linear-gradient(-45deg, #ED4264, #FFEDBC);
+  font-size: 12px;
 }
 
-.copyright .logo {
-  width: 28px;
-  height: 28px;
-  margin-top: 5px;
-  vertical-align:top;
-}
+@media only screen and (max-width: 620px) {
+  .header .info {
+    width: 100%!important;
+  }
 
-.copyright p {
-  font-weight: bold;
-  margin-top: 8px;
-  margin-bottom: 0;
+  .slots {
+    width: 100%!important;
+    height: 300px;
+  }
 }
