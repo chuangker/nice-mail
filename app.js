@@ -20,12 +20,17 @@ util.init()
 
 router
   .get('/user', api.getMailUser)
-  .get('/template', api.getTemplate)
+  .get('/version', api.checkVersion)
   .post('/user', api.addMailUser)
   .post('/user/delete', api.deleteMailUser)
+  .get('/template', api.getTemplate)
+  .get('/history', api.getHistory)
+  .get('/history/:id', api.getHistoryContent)
+  .delete('/history/:id', api.deleteHistory)
+  .post('/draft', api.saveDraft)
+  .post('/send', api.send)
   .post('/upload', api.upload)
   .post('/preview', api.preview)
-  .post('/send', api.send)
 
 util.getAllTemplateConfig().forEach(conf => {
   app.use(serve('/assets/' + conf.template, path.resolve(conf.dir, conf.assets)))

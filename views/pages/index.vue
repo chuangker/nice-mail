@@ -4,6 +4,15 @@
     <docs v-model="docsVisible"></docs>
     <iframe ref="iframe"></iframe>
     <div class="editor">
+      <div class="ui positive message" v-if="latestVersion">
+        <i class="close icon" @click="latestVersion = ''"></i>
+        <div class="header">Nice Mail 升级提醒</div>
+        <p>
+          <a href="https://www.npmjs.com/package/@chuangker/nice-mail" target="_blank">{{latestVersion}}</a>
+          已发布 (建议升级以获得更好体验), 详情见<a href="https://github.com/chuangker/nice-mail/releases" target="_blank">更新日志</a>。
+        </p>
+      </div>
+
       <div class="ui menu nav">
         <div class="item">
           <img src="/public/images/logo.png">
@@ -42,7 +51,41 @@
             <textarea ref="editor" :disabled="isSend" placeholder="内容" rows="30" v-model="form.content"></textarea>
           </div>
           <div class="field">
-            <div class="ui fluid button" @click="genDemo">使用演示文本</div>
+            <div class="ui two buttons">
+                <div class="ui button" @click="setMailContent()">使用演示文本</div>
+                <div class="ui button secondary" @click="saveDraft">保存草稿</div>
+            </div>
+            <h4 class="ui horizontal divider header">历史邮件（{{history.length}}）</h4>
+            <div class="ui cards">
+              <div class="ui fluid card" v-for="item in history" :key="item.id">
+                <div class="content">
+                  <div class="right floated ui label" v-if="item.draft">草稿</div>
+                  <div class="header" v-if="item.subject">{{item.subject}}</div>
+                  <div class="header" v-else>无主题</div>
+                  <div class="meta">{{item.dateTime}}</div>
+                </div>
+                <div class="content">
+                  <h4 class="ui sub header" v-if="item.from">{{item.from}}</h4>
+                  <h4 class="ui sub header" v-else>无发件人</h4>
+                  <div class="ui small feed">
+                    <div class="event">
+                      <div class="content">
+                        <div class="summary mail-to" v-if="item.to && item.to.length">
+                          <a v-for="(t, index) in item.to" :key="index">{{t}}</a>
+                        </div>
+                        <div class="summary mail-to" v-else>无收件人</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="extra content">
+                  <div class="ui two buttons">
+                    <div class="ui basic green button" @click="getHistory(item.id)">预览</div>
+                    <div class="ui basic red button" @click="deleteHistory(item.id)">删除</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -145,6 +188,8 @@ export default {
         type: '',
         timer: null
       },
+      latestVersion: '',
+      history: [],
       files: [],
       form: {
         template: '',
@@ -164,9 +209,11 @@ export default {
     }
   },
   mounted () {
+    this.checkVersion()
     this.bindDrop()
     this.fetch().then(() => {
       this.preview()
+      this.getHistory()
       this.$nextTick(() => {
         $('.ui.dropdown').dropdown({
           allowAdditions: true
@@ -197,6 +244,14 @@ export default {
     }
   },
   methods: {
+    checkVersion () {
+      axios.get('/api/version').then((res) => {
+        const body = res.data
+        if (body.success && body.data.update) {
+          this.latestVersion = body.data.version
+        }
+      })
+    },
     bindDrop () {
       this.editor.ondragleave = (e) => e.preventDefault()
       this.editor.ondragenter = (e) => e.preventDefault()
@@ -234,11 +289,11 @@ export default {
       const tempStr2 = this.editor.value.substring(rangeEnd)
       this.form.content = tempStr1 + content + tempStr2
     },
-    genDemo () {
+    setMailContent (content) {
       if (this.form.content) {
         return this.setNotice(true, '警告', '请先清空正文！', 'negative')
       }
-      this.form.content = demoTxt
+      this.form.content = content || demoTxt
     },
     onFileChange (e) {
       const files = e.target.files || e.dataTransfer.files
@@ -291,6 +346,39 @@ export default {
         this.form.template = this.templates[0].name
       })
     },
+    getHistory (id) {
+      if (id) {
+        axios.get('/api/history/' + id).then(res => {
+          const body = res.data
+          if (body.success) {
+            this.setMailContent(body.data)
+          }
+        })
+      } else {
+        axios.get('/api/history', this.form).then(res => {
+          const body = res.data
+          if (body.success) {
+            this.history = body.data
+          }
+        })
+      }
+    },
+    deleteHistory (id) {
+      return axios.delete('/api/history/' + id).then(res => {
+        const body = res.data
+        if (body.success) {
+          this.getHistory()
+        }
+      })
+    },
+    saveDraft () {
+      axios.post('/api/draft', this.form).then(res => {
+        const body = res.data
+        if (body.success) {
+          this.getHistory()
+        }
+      })
+    },
     send (send) {
       if (this.isSend) return
       const data = new FormData()
@@ -311,6 +399,11 @@ export default {
           return this.setNotice(true, '错误信息', body.message, 'negative')
         }
         this.setNotice(true, '发送成功', this.form.subject + ' 已成功发送！')
+        if (this.history[0] && this.history[0].draft) {
+          this.deleteHistory(this.history[0].id).then(this.getHistory)
+        } else {
+          this.getHistory()
+        }
       }).catch(() => {
         this.isSend = false
       })
@@ -356,6 +449,13 @@ export default {
     .header {
       font-size: 18px;
     }
+  }
+
+  .mail-to a:not(:last-child)::after {
+    display: inline;
+    content: ', ';
+    color: black;
+    cursor: default;
   }
 }
 </style>

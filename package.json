@@ -67,7 +67,9 @@
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "markdown-it-task-lists": "^2.1.0",
+    "moment": "^2.21.0",
     "nodemailer-plugin-inline-base64": "^2.1.0",
+    "semver": "^5.5.0",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1"
   },

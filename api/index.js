@@ -1,9 +1,13 @@
 'use strict'
 
-const fs = require('fs')
 const _ = require('lodash')
 const path = require('path')
+const axios = require('axios')
+const fs = require('fs-extra')
 const { URL } = require('url')
+const semver = require('semver')
+const crypto = require('crypto')
+const moment = require('moment')
 const Email = require('email-templates')
 const MarkdownIt = require('markdown-it')
 const mark = require('markdown-it-mark')
@@ -19,6 +23,7 @@ const tasklists = require('markdown-it-task-lists')
 const inlineBase64 = require('nodemailer-plugin-inline-base64')
 
 const util = require('../util')
+const packageJSON = require('../package.json')
 
 const templateDir = path.resolve(__dirname, '../templates')
 const uploadDir = util.getDir('upload')
@@ -38,6 +43,42 @@ const md = new MarkdownIt({
   .use(emoji)
   .use(katex, { 'throwOnError': false, 'errorColor': '#cc0000' })
   .use(tasklists, { enabled: this.taskLists })
+
+function saveHistory ({to, cc, bcc, subject, content, mailFrom, isDraft}) {
+  const historyPath = path.resolve(util.getDir('db'), 'history')
+  const db = util.getDB()
+  const history = db.history || []
+  const draft = _.find(history, ['draft', true])
+  let historyItem = isDraft ? draft : null
+
+  if (!historyItem) {
+    const hash = crypto.createHash('sha256')
+      .update(_.now() + content)
+      .digest('hex')
+
+    historyItem = {
+      id: hash,
+      file: path.resolve(historyPath, hash + '.md'),
+      draft: isDraft
+    }
+
+    if (!db.history) db.history = history
+    history.unshift(historyItem)
+
+    if (!isDraft && draft) {
+      history.unshift(_.pullAt(history, 1)[0])
+    }
+  }
+
+  historyItem.dateTime = moment().format('YYYY年MM月DD日 HH:mm')
+  historyItem.from = mailFrom
+  historyItem.to = _.filter([to, cc, bcc].join(',').split(','))
+  historyItem.subject = subject
+
+  fs.ensureDirSync(historyPath)
+  fs.writeFileSync(historyItem.file, content, 'utf8')
+  util.setDB(db)
+}
 
 module.exports = class ApiController {
   static async upload (ctx) {
@@ -219,11 +260,77 @@ module.exports = class ApiController {
           fields: newFields
         }
       })
+      saveHistory({ to, cc, bcc, subject, content, mailFrom })
     } catch (error) {
       ctx.body = ctx.util.refail(error.message)
       return
     }
 
     ctx.body = ctx.util.resuccess()
+  }
+
+  static async getHistory (ctx) {
+    let history = util.getDB('history') || []
+
+    history = history.map(item => {
+      delete item.file
+      return item
+    })
+
+    ctx.body = ctx.util.resuccess(history)
+  }
+
+  static async getHistoryContent (ctx) {
+    const id = ctx.params.id
+    const history = _.find(util.getDB('history'), ['id', id])
+    let content = ''
+
+    if (history) {
+      content = fs.readFileSync(history.file, 'utf8')
+    }
+
+    ctx.body = ctx.util.resuccess(content)
+  }
+
+  static async saveDraft (ctx) {
+    saveHistory({
+      ...ctx.request.body,
+      mailFrom: ctx.request.body.from,
+      isDraft: true
+    })
+    ctx.body = ctx.util.resuccess()
+  }
+
+  static async deleteHistory (ctx) {
+    const id = ctx.params.id
+
+    const db = util.getDB()
+    const history = db.history
+
+    const items = _.remove(history, ['id', id])
+    util.setDB(db)
+
+    if (items[0]) fs.removeSync(items[0].file)
+
+    ctx.body = ctx.util.resuccess()
+  }
+
+  static async checkVersion (ctx) {
+    const localVersion = packageJSON.version
+    const res = await axios.get('https://registry.npmjs.org/@chuangker%2Fnice-mail', {timeout: 5000})
+    const data = {
+      version: 'v' + localVersion,
+      update: false
+    }
+
+    if (res.status === 200) {
+      const latestVersion = res.data['dist-tags'].latest
+      if (semver.lt(localVersion, latestVersion)) {
+        data.version = 'v' + latestVersion
+        data.update = true
+      }
+    }
+
+    ctx.body = ctx.util.resuccess(data)
   }
 }

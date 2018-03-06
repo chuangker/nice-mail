@@ -14,9 +14,61 @@ module.exports = class Util {
     dbPath = path.resolve(this.getDir('db'), 'db.json')
     if (fs.existsSync(dbPath)) return
     fs.writeFileSync(dbPath, JSON.stringify({
-      mail: []
+      mail: [],
+      history: []
     }, null, 2))
   }
+
+  /**
+   * 获取 config/default.json 下的配置项
+   * @static
+   * @param String key
+   * @returns
+   */
+
+  static getConfig (key) {
+    const conf = JSON.parse(fs.readFileSync(configPath))
+    return key ? conf[key] : conf
+  }
+
+  /**
+   * 全量写入 config/default.json
+   * @static
+   * @param Object conf
+   */
+
+  static setConfig (conf) {
+    fs.writeFileSync(configPath, JSON.stringify(conf, null, 2))
+  }
+
+  /**
+   * 获取 dbPath 下的配置项
+   * @static
+   * @param String key
+   * @returns
+   */
+
+  static getDB (key) {
+    const db = JSON.parse(fs.readFileSync(dbPath))
+    return key ? db[key] : db
+  }
+
+  /**
+   * 全量写入 dbPath
+   * @static
+   * @param Object conf
+   */
+
+  static setDB (conf) {
+    fs.writeFileSync(dbPath, JSON.stringify(conf, null, 2))
+  }
+
+  /**
+   * 获取 config/default.json 下某个目录的完整路径
+   * @static
+   * @param String dirName
+   */
+
   static getDir (dirName) {
     const dir = this.getConfig(dirName)
     if (dir) {
@@ -25,20 +77,13 @@ module.exports = class Util {
       return fullPath
     }
   }
-  static getConfig (key) {
-    const conf = JSON.parse(fs.readFileSync(configPath))
-    return key ? conf[key] : conf
-  }
-  static setConfig (conf) {
-    fs.writeFileSync(configPath, JSON.stringify(conf, null, 2))
-  }
-  static getDB (key) {
-    const db = JSON.parse(fs.readFileSync(dbPath))
-    return key ? db[key] : db
-  }
-  static setDB (conf) {
-    fs.writeFileSync(dbPath, JSON.stringify(conf, null, 2))
-  }
+
+  /**
+   * 获取邮件所有模板
+   * @static
+   * @returns
+   */
+
   static getAllTemplateConfig () {
     const dirs = fs.readdirSync(templates)
     const config = []
@@ -58,6 +103,13 @@ module.exports = class Util {
 
     return config
   }
+
+  /**
+   * 通过模板名获取模板的相关配置信息
+   * @static
+   * @param String name
+   * @returns
+   */
 
   static getConfigByName (name) {
     return _.find(this.getAllTemplateConfig(), ['name', name])
