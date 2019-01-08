@@ -50,7 +50,7 @@
               </div>
             </div>
             <div class="field">
-              <button class="fluid primary ui button" @click="addUser">添加发件人</button>
+              <button class="fluid primary ui button" @click="addUser" :disabled="addSenderBtnDisabled">添加发件人</button>
             </div>
           </div>
         </div>
@@ -99,6 +99,13 @@ export default {
       } else {
         $('.sender-modal').modal('hide')
       }
+    }
+  },
+  computed: {
+    addSenderBtnDisabled: function () {
+      return !!Object.values(this.form).filter((item) => {
+        return (typeof item === 'string') && !item
+      }).length
     }
   },
   methods: {
