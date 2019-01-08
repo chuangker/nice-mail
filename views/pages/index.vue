@@ -113,7 +113,7 @@
               <i class="dropdown icon"></i>
               <div class="default text">选择发件人</div>
               <div class="menu">
-                <div class="item" :data-value="item.from" v-for="item in users" :key="item.from">{{item.alias}}({{item.from}})</div>
+                <div class="item" :data-value="item.from" v-for="item in users" :key="item.from" @click="selectUser(item.from)">{{item.alias}}({{item.from}})</div>
               </div>
             </div>
           </div>
@@ -251,6 +251,9 @@ export default {
           this.latestVersion = body.data.version
         }
       })
+    },
+    selectUser (user) {
+      this.form.from = user
     },
     bindDrop () {
       this.editor.ondragleave = (e) => e.preventDefault()
