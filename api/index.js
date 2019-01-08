@@ -20,9 +20,9 @@ const deflist = require('markdown-it-deflist')
 const footnote = require('markdown-it-footnote')
 const abbreviation = require('markdown-it-abbr')
 const tasklists = require('markdown-it-task-lists')
-const inlineBase64 = require('nodemailer-plugin-inline-base64')
 
 const util = require('../util')
+const mail = require('../util/mail')
 const packageJSON = require('../package.json')
 
 const templateDir = path.resolve(__dirname, '../templates')
@@ -202,65 +202,15 @@ module.exports = class ApiController {
   }
 
   static async send (ctx) {
-    const {to, cc, bcc, send, subject, content, template, fields} = ctx.request.body.fields
-    const mailFrom = ctx.request.body.fields.from
-    let files = ctx.request.body.files.file
-
-    const newFields = {}
-
-    if (files && !files.length) {
-      files = [files]
+    const params = {
+      ...ctx.request.body.fields,
+      mailFrom: ctx.request.body.fields.from,
+      file: ctx.request.body.files.file
     }
-
-    if (fields) {
-      JSON.parse(fields).forEach(field => {
-        newFields[field.name] = field.value
-      })
-    }
-
-    const conf = util.getConfigByName(template)
-    const mailConf = _.find(util.getDB('mail'), ['from', mailFrom])
-
-    if (!mailConf) {
-      ctx.body = ctx.util.refail('无发件人信息')
-      return
-    }
-
-    const email = new Email({
-      message: {
-        from: mailFrom,
-        attachments: _.map(files, file => ({
-          filename: file.name,
-          content: fs.createReadStream(file.path)
-        }))
-      },
-      preview: send === 'false',
-      send: send === 'true',
-      transport: mailConf.transport,
-      views: {
-        root: templateDir
-      },
-      juiceResources: {
-        webResources: {
-          images: true,
-          relativeTo: path.resolve(conf.dir, conf.assets)
-        }
-      }
-    })
-
-    email.config.transport.use('compile', inlineBase64())
 
     try {
-      await email.send({
-        template: conf.template,
-        message: { to, cc, bcc },
-        locals: {
-          subject,
-          content: md.render(content),
-          fields: newFields
-        }
-      })
-      saveHistory({ to, cc, bcc, subject, content, mailFrom })
+      await mail.send(params)
+      saveHistory(params)
     } catch (error) {
       ctx.body = ctx.util.refail(error.message)
       return
