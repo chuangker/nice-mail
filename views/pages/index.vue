@@ -22,7 +22,17 @@
         <a class="active item" data-tab="tab-name">正文</a>
         <div class="menu right">
           <div class="item">
-            <div class="ui positive button" @click="send(true)">发送</div>
+            <div class="ui positive buttons">
+              <div class="ui button" @click="send(true)">发送</div>
+              <div class="ui floating dropdown icon button">
+                <i class="dropdown icon"></i>
+                <div class="menu center">
+                  <div class="item" @click="saveDraft">保存草稿</div>
+                  <div class="divider"></div>
+                  <div class="item" @click="downloadPDF">保存为 PDF</div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="ui dropdown item icon"><i class="setting icon"></i>
             <div class="menu">
@@ -51,10 +61,7 @@
             <textarea ref="editor" :disabled="isSend" placeholder="内容" rows="30" v-model="form.content"></textarea>
           </div>
           <div class="field">
-            <div class="ui two buttons">
-                <div class="ui button" @click="setMailContent()">使用演示文本</div>
-                <div class="ui button secondary" @click="saveDraft">保存草稿</div>
-            </div>
+            <div class="ui button fluid" @click="setMailContent()">使用演示文本</div>
             <h4 class="ui horizontal divider header">历史邮件（{{history.length}}）</h4>
             <div class="ui cards">
               <div class="ui fluid card" v-for="item in history" :key="item.id">
@@ -216,7 +223,11 @@ export default {
       this.getHistory()
       this.$nextTick(() => {
         $('.ui.dropdown').dropdown({
-          allowAdditions: true
+          allowAdditions: true,
+          className: {
+            active: '_active',
+            selected: '_selected'
+          }
         })
       })
     })
@@ -244,6 +255,23 @@ export default {
     }
   },
   methods: {
+    downloadPDF () {
+      axios.post('/api/download/pdf', { html: this.html }).then((res) => {
+        const body = res.data
+
+        if (!body.success) {
+          return this.setNotice(true, '错误信息', body.message, 'negative')
+        }
+
+        let buffers = body.data.buffers
+        let blod = new Blob([new Uint8Array(buffers.data).buffer])
+        let link = document.createElement('a')
+        link.href = URL.createObjectURL(blod)
+        link.download = 'NiceMail.pdf'
+        link.click()
+        URL.revokeObjectURL(link.href)
+      })
+    },
     checkVersion () {
       axios.get('/api/version').then((res) => {
         const body = res.data

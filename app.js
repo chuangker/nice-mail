@@ -31,6 +31,7 @@ router
   .post('/send', api.send)
   .post('/upload', api.upload)
   .post('/preview', api.preview)
+  .post('/download/pdf', api.downloadPDF)
 
 util.getAllTemplateConfig().forEach(conf => {
   app.use(serve('/assets/' + conf.template, path.resolve(conf.dir, conf.assets)))
