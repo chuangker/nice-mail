@@ -1,0 +1,28 @@
+{
+    "name": "Concise Resume",
+    "assets": "./assets",
+    "preview": "theme.png",
+    "fields": [
+      {
+        "name": "title",
+        "value": "个人信息"
+      },
+      {
+        "name": "subtitle",
+        "value": "web 前端"
+      },
+      {
+        "name": "avatar",
+        "value": "../../../public/images/avatar.png"
+      },
+      {
+        "name": "nickName",
+        "value": "Nick Name"
+      },
+      {
+        "name": "desc",
+        "value": "Description"
+      }
+    ]
+  }
+  

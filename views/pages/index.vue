@@ -20,6 +20,7 @@
         <a class="item" data-tab="tab-name3">主题</a>
         <a class="item" data-tab="tab-name2">配置</a>
         <a class="active item" data-tab="tab-name">正文</a>
+        <a class="item" @click="mdToPdf">转 PDF</a>
         <div class="menu right">
           <div class="item">
             <div class="ui positive button" @click="send(true)">发送</div>
@@ -164,6 +165,7 @@ import axios from 'axios'
 import debounce from 'lodash/debounce'
 import find from 'lodash/find'
 import demoTxt from './demo.txt'
+import resumeTxt from './resume.txt'
 import docs from './docs'
 import sender from '../components/sender'
 
@@ -218,6 +220,7 @@ export default {
         $('.ui.dropdown').dropdown({
           allowAdditions: true
         })
+        if (this.form.template.match(/resume/i)) this.setMailContent()
       })
     })
     $('.message.warning').transition('fade')
@@ -244,6 +247,17 @@ export default {
     }
   },
   methods: {
+    mdToPdf () {
+      axios.post('/api/pdf', { html: this.html }).then((res) => {
+        let buffers = res.data.data.buffers
+        let blod = new Blob([new Uint8Array(buffers.data).buffer])
+        let url = window.URL.createObjectURL(blod)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = 'email.pdf'
+        link.click()
+      })
+    },
     checkVersion () {
       axios.get('/api/version').then((res) => {
         const body = res.data
@@ -296,7 +310,7 @@ export default {
       if (this.form.content) {
         return this.setNotice(true, '警告', '请先清空正文！', 'negative')
       }
-      this.form.content = content || demoTxt
+      this.form.content = content || (this.form.template.match(/resume/i) ? resumeTxt : demoTxt)
     },
     onFileChange (e) {
       const files = e.target.files || e.dataTransfer.files

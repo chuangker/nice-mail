@@ -3,6 +3,7 @@
 const _ = require('lodash')
 const path = require('path')
 const axios = require('axios')
+const htmlpdf = require('html-pdf')
 const fs = require('fs-extra')
 const { URL } = require('url')
 const semver = require('semver')
@@ -98,6 +99,28 @@ module.exports = class ApiController {
     })
 
     ctx.body = ctx.util.resuccess(list)
+  }
+
+  static async pdf (ctx) {
+    const html = ctx.request.body.html
+    let buffers
+
+    async function toPdf () {
+      return new Promise((resolve) => {
+        htmlpdf.create(html, {
+          height: '100in',
+          format: '2A4'
+        }).toBuffer((err, buffer) => {
+          if (err) {
+            ctx.body = ctx.util.refail(err)
+            return
+          }
+          resolve(buffer)
+        })
+      })
+    }
+    buffers = await toPdf()
+    ctx.body = ctx.util.resuccess({buffers: buffers})
   }
 
   static async getTemplate (ctx) {

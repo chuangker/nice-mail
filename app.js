@@ -20,6 +20,7 @@ util.init()
 
 router
   .get('/user', api.getMailUser)
+  .post('/pdf', api.pdf)
   .get('/version', api.checkVersion)
   .post('/user', api.addMailUser)
   .post('/user/delete', api.deleteMailUser)

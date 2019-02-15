@@ -1,0 +1,26 @@
+doctype transitional
+html(xmlns='http://www.w3.org/1999/xhtml', lang='en', xml:lang='en')
+  head
+    meta(name='viewport', content='width=device-width')
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    title= subject
+    link(rel="stylesheet", href="../../../public/css/template-reset.css", data-inline)
+    link(rel="stylesheet", href="../../../public/css/template-markdown.css", data-inline)
+    link(rel="stylesheet", href="main.css", data-inline)
+  body
+    table.body(border='0', cellpadding='0', cellspacing='0')
+      tr
+        td
+          div.container
+            .content
+              table.main.header(border='0', cellpadding='0', cellspacing='0')
+                tr
+                  td
+                    div.info
+                      p.title.text-center !{fields.title}
+              table.main.markdown(border='0', cellpadding='0', cellspacing='0')
+                tr
+                  td
+                    .markdown-body !{content}
+                tr
+                  td.footer
