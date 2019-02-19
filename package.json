@@ -46,6 +46,7 @@
     "axios": "^0.17.1",
     "commander": "^2.19.0",
     "cross-env": "^5.2.0",
+    "dom-to-image": "^2.6.0",
     "email-templates": "^3.6.1",
     "fs-extra": "^5.0.0",
     "html-pdf": "^2.2.0",

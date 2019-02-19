@@ -13,6 +13,7 @@ Nice Mail 是一款以 Markdown 为基础的邮件编辑器。如果你厌倦了
 - 支持 HTML
 - 支持 Markdown
 - 支持保存为 PDF
+- 支持保存为图片
 
 ## 快速开始
 

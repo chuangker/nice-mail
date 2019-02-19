@@ -2,7 +2,7 @@
   <div class="nm-index">
     <sender v-model="senderVisible" @change="fetchUser"></sender>
     <docs v-model="docsVisible"></docs>
-    <iframe ref="iframe"></iframe>
+    <iframe ref="iframe" name="preview"></iframe>
     <div class="editor">
       <div class="ui positive message" v-if="latestVersion">
         <i class="close icon" @click="latestVersion = ''"></i>
@@ -30,6 +30,7 @@
                   <div class="item" @click="saveDraft">保存草稿</div>
                   <div class="divider"></div>
                   <div class="item" @click="downloadPDF">保存为 PDF</div>
+                  <div class="item" @click="downloadImage">保存为图片</div>
                 </div>
               </div>
             </div>
@@ -168,6 +169,7 @@
 
 <script>
 import axios from 'axios'
+import domtoimage from 'dom-to-image'
 import debounce from 'lodash/debounce'
 import find from 'lodash/find'
 import demoTxt from './demo.txt'
@@ -271,6 +273,19 @@ export default {
         link.click()
         URL.revokeObjectURL(link.href)
       })
+    },
+    downloadImage () {
+      domtoimage
+        .toPng(window.frames['preview'].document.body, {
+          bgcolor: '#fff',
+          width: 700
+        })
+        .then(dataUrl => {
+          let link = document.createElement('a')
+          link.download = 'NiceMail.png'
+          link.href = dataUrl
+          link.click()
+        })
     },
     checkVersion () {
       axios.get('/api/version').then((res) => {
